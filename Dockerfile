@@ -16,7 +16,7 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /app
 
 # Copy dependency specification and install dependencies using Poetry
-COPY pyproject.toml poetry.lock ./
+COPY pyproject.toml ./
 RUN pip install --no-cache-dir poetry \
     && poetry config virtualenvs.create false \
     && poetry install --no-interaction --no-ansi --no-root --only main
