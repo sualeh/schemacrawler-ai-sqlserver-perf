@@ -2,9 +2,9 @@
 name = "schemacrawler-ai-sqlserver-perf"
 version = "0.1.0"
 description = "SchemaCrawler AI MCP Server for SQL Server Performance Analysis"
-authors = ["SchemaCrawler Team <team@schemacrawler.com>"]
+authors = ["Sualeh Fatehi <sualeh@hotmail.com>"]
 readme = "README.md"
-packages = [{include = "schemacrawler_ai"}]
+packages = [{include = "schemacrawler-ai-sqlserver-perf"}]
 
 [tool.poetry.dependencies]
 python = "^3.11"
@@ -20,7 +20,7 @@ ruff = "^0.7.0"
 mypy = "^1.8.0"
 
 [tool.poetry.scripts]
-schemacrawler-ai-server = "schemacrawler_ai.main:main"
+schemacrawler-ai-server = "schemacrawler-ai-sqlserver-perf.main:main"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
