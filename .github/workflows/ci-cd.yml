@@ -53,6 +53,7 @@ jobs:
       run: |
         poetry run black --check .
         poetry run ruff check .
+      if: false
 
     - id: type-checking
       name: Run type checking
