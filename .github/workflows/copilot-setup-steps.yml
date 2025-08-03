@@ -8,7 +8,7 @@ on:
     branches: [ main, develop ]
 
 jobs:
-  setup:
+  copilot-setup-steps:
     name: Setup Environment for GitHub Copilot
     runs-on: ubuntu-latest
 
