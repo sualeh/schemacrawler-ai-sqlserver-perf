@@ -13,7 +13,7 @@ concurrency:
 
 env:
   REGISTRY: docker.io
-  IMAGE_NAME: schemacrawler-ai/sqlserver-perf
+  IMAGE_NAME: schemacrawler/schemacrawler-ai-sqlserver-perf
 
 jobs:
   test:

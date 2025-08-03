@@ -38,7 +38,9 @@ COPY --from=builder /usr/local/lib/python3.12/site-packages /usr/local/lib/pytho
 WORKDIR /app
 
 # Copy application code
-COPY --chown=appuser:appuser schemacrawler_ai/ ./schemacrawler_ai/
+COPY --chown=appuser:appuser \
+  schemacrawler_ai_sqlserver_perf/ \
+  ./schemacrawler_ai_sqlserver_perf/
 
 # Switch to non-root user
 USER appuser
@@ -47,4 +49,4 @@ USER appuser
 EXPOSE 8000
 
 # Default command
-CMD ["python", "-m", "schemacrawler_ai.main"]
+CMD ["python", "-m", "schemacrawler_ai_sqlserver_perf.main"]

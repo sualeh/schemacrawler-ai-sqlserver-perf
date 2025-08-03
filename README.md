@@ -30,7 +30,7 @@ This is a Python MCP Server using Fast MCP. Each MCP tool will make a connection
 ### Using Docker
 
 ```bash
-docker run -p 8000:8000 schemacrawler-ai/sqlserver-perf:latest
+docker run -p 8000:8000 schemacrawler/schemacrawler-ai-sqlserver-perf:latest
 ```
 
 ## Development
