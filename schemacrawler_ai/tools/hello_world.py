@@ -22,7 +22,10 @@ async def hello_world_tool(name: str) -> dict[str, Any]:
         JSON object with greeting message
     """
     # Create greeting message
-    message = f"Hello, {name}! Welcome to SchemaCrawler AI MCP Server."
+    message = (
+        f"Hello, {name}! Welcome to SchemaCrawler AI MCP Server "
+        "for SQL Server Performance."
+    )
 
     # Return JSON response
     return {

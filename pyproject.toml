@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "schemacrawler-ai-sqlserver-perf"
 version = "0.1.0"
-description = "Python MCP Server using Fast MCP for SQL Server Performance Analysis"
+description = "SchemaCrawler AI MCP Server for SQL Server Performance Analysis"
 authors = ["SchemaCrawler Team <team@schemacrawler.com>"]
 readme = "README.md"
 packages = [{include = "schemacrawler_ai"}]

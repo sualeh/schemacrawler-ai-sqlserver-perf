@@ -12,7 +12,7 @@ class TestMCPServer:
         assert server is not None
         # Check that the server has the basic attributes we expect
         assert hasattr(server, "name")
-        assert server.name == "SchemaCrawler AI Server"
+        assert server.name == "SchemaCrawler AI MCP Server for SQL Server Performance"
 
     def test_server_has_hello_world_tool(self):
         """Test that the server has the hello world tool registered."""
