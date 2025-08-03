@@ -37,7 +37,7 @@ jobs:
       uses: actions/cache@v4
       with:
         path: .venv
-        key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+        key: venv-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
 
     - id: install-dependencies
       name: Install dependencies
@@ -68,7 +68,12 @@ jobs:
       name: Verify Docker
       run: |
         docker --version
-        docker-compose --version || echo "docker-compose not available"
+        docker compose version || echo "'docker compose' not available"
+
+    - id: run-tests
+      name: Run tests
+      run: |
+        poetry run pytest --maxfail=1 --disable-warnings -q
 
     - id: health-checks
       name: Run basic health checks
