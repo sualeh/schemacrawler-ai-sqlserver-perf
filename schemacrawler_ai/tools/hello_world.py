@@ -1,5 +1,6 @@
 """Hello World MCP tool."""
 
+import datetime
 from typing import Any
 
 from pydantic import BaseModel, Field
@@ -26,7 +27,9 @@ async def hello_world_tool(name: str) -> dict[str, Any]:
     # Return JSON response
     return {
         "message": message,
-        "timestamp": datetime.datetime.now(datetime.timezone.utc).isoformat().replace("+00:00", "Z"),
+        "timestamp": datetime.datetime.now(datetime.UTC)
+        .isoformat()
+        .replace("+00:00", "Z"),
         "tool": "hello_world",
         "success": True,
     }
