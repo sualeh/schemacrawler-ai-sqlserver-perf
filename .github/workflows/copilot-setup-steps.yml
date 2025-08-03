@@ -1,0 +1,70 @@
+name: Copilot Setup Steps
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  setup:
+    name: Setup Environment for GitHub Copilot
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        
+    - name: Install Poetry
+      uses: snok/install-poetry@v1
+      with:
+        version: latest
+        virtualenvs-create: true
+        virtualenvs-in-project: true
+        installer-parallel: true
+        
+    - name: Load cached venv
+      id: cached-poetry-dependencies
+      uses: actions/cache@v3
+      with:
+        path: .venv
+        key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+        
+    - name: Install dependencies
+      if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+      run: poetry install --no-interaction --no-root
+      
+    - name: Install project
+      run: poetry install --no-interaction
+      
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+      
+    - name: Install development tools
+      run: |
+        poetry run pip install --upgrade pip
+        poetry run pip install black pylint pytest pytest-cov
+        
+    - name: Verify Python environment
+      run: |
+        poetry run python --version
+        poetry run pip list
+        
+    - name: Verify Docker
+      run: |
+        docker --version
+        docker-compose --version || echo "docker-compose not available"
+        
+    - name: Run basic health checks
+      run: |
+        echo "Environment setup complete!"
+        echo "Python: $(poetry run python --version)"
+        echo "Poetry: $(poetry --version)"
+        echo "Docker: $(docker --version)"
+        poetry run python -c "import sys; print(f'Python path: {sys.executable}')"
