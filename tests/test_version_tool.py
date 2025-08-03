@@ -2,7 +2,7 @@
 
 import pytest
 
-from schemacrawler_ai.tools.version import version_tool
+from schemacrawler_ai_sqlserver_perf.tools.version_tool import version_tool
 
 
 class TestVersionTool:

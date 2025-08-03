@@ -1,6 +1,6 @@
 """Tests for the main MCP server."""
 
-from schemacrawler_ai.main import create_server
+from schemacrawler_ai_sqlserver_perf.main import create_server
 
 
 class TestMCPServer:
@@ -15,7 +15,7 @@ class TestMCPServer:
         assert server.name == "SchemaCrawler AI MCP Server for SQL Server Performance"
 
     def test_server_has_version_tool(self):
-        """Test that the server has the hello world tool registered."""
+        """Test that the server has the version tool registered."""
         server = create_server()
         # This test will need to be updated based on FastMCP's actual API
         # For now, we just check that the server is created successfully

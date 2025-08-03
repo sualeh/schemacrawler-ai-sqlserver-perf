@@ -2,20 +2,6 @@
 
 This is a Python MCP Server using Fast MCP. Each MCP tool will make a connection to a database, execute SQL and return the results as JSON. The SQL is hardcoded but is a template - parts of the SQL including table names may be replaced based on tool parameters.
 
-## Features
-
-- **Hello World Tool**: A simple MCP tool that greets users with personalized messages
-- **Modular Architecture**: Separate modules for tools allowing easy extension
-- **Comprehensive Testing**: Unit tests with coverage reporting
-- **Docker Support**: Multi-architecture Docker images (AMD64 + ARM64)
-- **CI/CD Pipeline**: Automated testing and deployment via GitHub Actions
-
-## Requirements
-
-- Python 3.12+
-- Poetry 2.1.3+
-- Docker (for containerization)
-
 ## Installation
 
 ### Using Poetry (Development)
@@ -53,10 +39,10 @@ docker run -p 8000:8000 schemacrawler-ai/sqlserver-perf:latest
 
 ```bash
 # Run all tests with coverage
-poetry run pytest --cov=schemacrawler_ai --cov-report=html
+poetry run pytest --cov=schemacrawler_ai_sqlserver_perf --cov-report=html
 
 # Run specific test file
-poetry run pytest tests/test_version.py -v
+poetry run pytest tests/test_version_tool.py -v
 ```
 
 ### Code Quality

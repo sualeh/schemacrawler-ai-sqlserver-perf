@@ -5,7 +5,7 @@ import logging
 
 from mcp.server import FastMCP
 
-from schemacrawler_ai.tools.version_tool import version_tool
+from schemacrawler_ai_sqlserver_perf.tools.version_tool import version_tool
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
