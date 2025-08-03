@@ -44,7 +44,7 @@ This is a Python MCP Server using Fast MCP. Each MCP tool will make a connection
 ### Using Docker
 
 ```bash
-docker run -p 8000:8000 schemacrawler/ai-sqlserver-perf:latest
+docker run -p 8000:8000 schemacrawler-ai/sqlserver-perf:latest
 ```
 
 ## Development
@@ -111,7 +111,7 @@ Example usage through MCP protocol:
 Returns:
 ```json
 {
-  "message": "Hello, Alice! Welcome to SchemaCrawler AI MCP Server.",
+  "message": "Hello, Alice! Welcome to SchemaCrawler AI MCP Server for SQL Server Performance.",
   "timestamp": "2025-01-03T13:24:00Z",
   "tool": "hello_world",
   "success": true

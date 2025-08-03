@@ -15,12 +15,12 @@ logger = logging.getLogger(__name__)
 def create_server() -> FastMCP:
     """Create and configure the MCP server."""
     # Create FastMCP server instance
-    server = FastMCP("SchemaCrawler AI Server")
+    server = FastMCP("SchemaCrawler AI MCP Server for SQL Server Performance")
 
     # Register the hello world tool using the decorator
     server.tool()(hello_world_tool)
 
-    logger.info("SchemaCrawler AI MCP Server initialized")
+    logger.info("SchemaCrawler AI MCP Server for SQL Server Performance initialized")
     return server
 
 
