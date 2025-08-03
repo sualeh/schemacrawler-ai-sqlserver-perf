@@ -31,7 +31,7 @@ def main() -> None:
     server = create_server()
 
     # Run the server
-    asyncio.run(server.run())
+    server.run()
 
 
 if __name__ == "__main__":
