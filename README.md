@@ -24,14 +24,23 @@ This is a Python MCP Server using Fast MCP. Each MCP tool will make a connection
 
 4. Run the server:
    ```bash
-   poetry run python -m schemacrawler_ai.main
+   poetry run python -m schemacrawler_ai_sqlserver_perf.main
    ```
 
 ### Using Docker
 
+#### Build Docker Image Locally
+
 ```bash
-docker run -p 8000:8000 schemacrawler/schemacrawler-ai-sqlserver-perf:latest
+docker build -t schemacrawler/schemacrawler-ai-sqlserver-perf:latest .
 ```
+
+#### Run Docker Image
+
+```bash
+docker run -d -p 8000:8000 schemacrawler/schemacrawler-ai-sqlserver-perf:latest
+```
+
 
 ## Development
 
@@ -57,86 +66,6 @@ poetry run ruff check .
 # Type checking
 poetry run mypy schemacrawler_ai/ --ignore-missing-imports
 ```
-
-### Project Structure
-
-```
-schemacrawler-ai-sqlserver-perf/
-├── schemacrawler_ai/           # Main package
-│   ├── __init__.py
-│   ├── main.py                 # MCP server entry point
-│   └── tools/                  # MCP tools module
-│       ├── __init__.py
-│       └── version.py      # Hello World tool
-├── tests/                      # Test suite
-│   ├── __init__.py
-│   ├── test_version.py
-│   └── test_main.py
-├── pyproject.toml              # Poetry configuration
-├── Dockerfile                  # Docker configuration
-└── .github/workflows/          # CI/CD pipeline
-    └── ci-cd.yml
-```
-
-## MCP Tools
-
-### Hello World Tool
-
-The `version` tool demonstrates basic MCP functionality:
-
-- **Input**: `name` (string) - The name to greet
-- **Output**: JSON object with greeting message, timestamp, and success status
-
-Example usage through MCP protocol:
-```json
-{
-  "name": "Alice"
-}
-```
-
-Returns:
-```json
-{
-  "message": "Hello, Alice! Welcome to SchemaCrawler AI MCP Server for SQL Server Performance.",
-  "timestamp": "2025-01-03T13:24:00Z",
-  "tool": "version",
-  "success": true
-}
-```
-
-## Adding New Tools
-
-1. Create a new tool module in `schemacrawler_ai/tools/`
-2. Implement the tool function with proper type annotations
-3. Register the tool in `schemacrawler_ai/main.py`
-4. Add tests in the `tests/` directory
-
-Example tool structure:
-```python
-async def my_new_tool(param: str) -> dict[str, Any]:
-    """Description of the tool.
-
-    Args:
-        param: Description of the parameter
-
-    Returns:
-        JSON object with tool results
-    """
-    return {"result": f"Processed {param}"}
-```
-
-## CI/CD Pipeline
-
-The project includes a comprehensive CI/CD pipeline that:
-
-1. **Tests**: Runs unit tests, linting, and type checking
-2. **Build**: Creates multi-architecture Docker images
-3. **Deploy**: Pushes images to Docker Hub
-4. **Integration Test**: Validates deployed images
-
-The pipeline runs on:
-- Pull requests (test only)
-- Pushes to main/develop branches (full pipeline)
 
 ## License
 

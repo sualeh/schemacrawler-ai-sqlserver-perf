@@ -20,9 +20,7 @@ def create_server() -> FastMCP:
     # Register the hello world tool using the decorator
     server.tool()(version_tool)
 
-    logger.info(
-        "SchemaCrawler AI MCP Server for SQL Server Performance initialized"
-    )
+    logger.info("SchemaCrawler AI MCP Server for SQL Server Performance initialized")
     return server
 
 

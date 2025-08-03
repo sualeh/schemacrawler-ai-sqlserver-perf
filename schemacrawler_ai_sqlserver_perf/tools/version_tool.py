@@ -21,9 +21,7 @@ async def version_tool() -> dict[str, Any]:
         JSON object with version information
     """
     # Create version message
-    message = (
-        "SchemaCrawler AI MCP Server for SQL Server Performance."
-    )
+    message = "SchemaCrawler AI MCP Server for SQL Server Performance."
 
     # Return JSON response
     return {
