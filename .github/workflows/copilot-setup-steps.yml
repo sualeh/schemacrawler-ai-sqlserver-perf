@@ -1,30 +1,41 @@
-name: Copilot Setup Steps
+name: "Copilot Setup Steps"
 
+# Automatically run the setup steps when they are changed to allow for easy validation, and
+# allow manual testing through the repository's "Actions" tab
 on:
   workflow_dispatch:
   push:
-    branches: [ main, develop ]
+    paths:
+      - .github/workflows/copilot-setup-steps.yml
   pull_request:
-    branches: [ main, develop ]
+    paths:
+      - .github/workflows/copilot-setup-steps.yml
 
 jobs:
+  # The job MUST be called `copilot-setup-steps` or it will not be picked up by Copilot.
   copilot-setup-steps:
-    name: Setup Environment for GitHub Copilot
+    name: "Setup Environment for GitHub Copilot"
     runs-on: ubuntu-latest
+
+    # Set the permissions to the lowest permissions possible needed for your steps.
+    # Copilot will be given its own token for its operations.
+    permissions:
+      # If you want to clone the repository as part of your setup steps, for example to install dependencies, you'll need the `contents: read` permission. If you don't clone the repository in your setup steps, Copilot will do this for you automatically after the steps complete.
+      contents: read
 
     steps:
     - id: checkout
-      name: Checkout code
+      name: "Checkout code"
       uses: actions/checkout@v4
 
     - id: setup-python
-      name: Set up Python
+      name: "Set up Python"
       uses: actions/setup-python@v4
       with:
         python-version: '3.11'
 
     - id: install-poetry
-      name: Install Poetry
+      name: "Install Poetry"
       uses: snok/install-poetry@v1
       with:
         version: latest
@@ -33,50 +44,50 @@ jobs:
         installer-parallel: true
 
     - id: cached-poetry-dependencies
-      name: Load cached venv
+      name: "Load cached venv"
       uses: actions/cache@v4
       with:
         path: .venv
         key: venv-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
 
     - id: install-dependencies
-      name: Install dependencies
+      name: "Install dependencies"
       if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
       run: poetry install --no-interaction --no-root
 
     - id: install-project
-      name: Install project
+      name: "Install project"
       run: poetry install --no-interaction
 
     - id: setup-buildx
-      name: Set up Docker Buildx
+      name: "Set up Docker Buildx"
       uses: docker/setup-buildx-action@v3
 
     - id: install-dev-tools
-      name: Install development tools
+      name: "Install development tools"
       run: |
         poetry run pip install --upgrade pip
         poetry run pip install black pylint pytest pytest-cov
 
     - id: verify-python-env
-      name: Verify Python environment
+      name: "Verify Python environment"
       run: |
         poetry run python --version
         poetry run pip list
 
     - id: verify-docker
-      name: Verify Docker
+      name: "Verify Docker"
       run: |
         docker --version
         docker compose version || echo "'docker compose' not available"
 
     - id: run-tests
-      name: Run tests
+      name: "Run tests"
       run: |
         poetry run pytest --maxfail=1 --disable-warnings -q
 
     - id: health-checks
-      name: Run basic health checks
+      name: "Run basic health checks"
       run: |
         echo "Environment setup complete!"
         echo "Python: $(poetry run python --version)"
