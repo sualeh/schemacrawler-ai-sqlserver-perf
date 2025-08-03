@@ -5,7 +5,7 @@ import logging
 
 from mcp.server import FastMCP
 
-from schemacrawler_ai.tools.hello_world import hello_world_tool
+from schemacrawler_ai.tools.version_tool import version_tool
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -18,9 +18,11 @@ def create_server() -> FastMCP:
     server = FastMCP("SchemaCrawler AI MCP Server for SQL Server Performance")
 
     # Register the hello world tool using the decorator
-    server.tool()(hello_world_tool)
+    server.tool()(version_tool)
 
-    logger.info("SchemaCrawler AI MCP Server for SQL Server Performance initialized")
+    logger.info(
+        "SchemaCrawler AI MCP Server for SQL Server Performance initialized"
+    )
     return server
 
 

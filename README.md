@@ -56,7 +56,7 @@ docker run -p 8000:8000 schemacrawler-ai/sqlserver-perf:latest
 poetry run pytest --cov=schemacrawler_ai --cov-report=html
 
 # Run specific test file
-poetry run pytest tests/test_hello_world.py -v
+poetry run pytest tests/test_version.py -v
 ```
 
 ### Code Quality
@@ -81,10 +81,10 @@ schemacrawler-ai-sqlserver-perf/
 │   ├── main.py                 # MCP server entry point
 │   └── tools/                  # MCP tools module
 │       ├── __init__.py
-│       └── hello_world.py      # Hello World tool
+│       └── version.py      # Hello World tool
 ├── tests/                      # Test suite
 │   ├── __init__.py
-│   ├── test_hello_world.py
+│   ├── test_version.py
 │   └── test_main.py
 ├── pyproject.toml              # Poetry configuration
 ├── Dockerfile                  # Docker configuration
@@ -96,7 +96,7 @@ schemacrawler-ai-sqlserver-perf/
 
 ### Hello World Tool
 
-The `hello_world` tool demonstrates basic MCP functionality:
+The `version` tool demonstrates basic MCP functionality:
 
 - **Input**: `name` (string) - The name to greet
 - **Output**: JSON object with greeting message, timestamp, and success status
@@ -113,7 +113,7 @@ Returns:
 {
   "message": "Hello, Alice! Welcome to SchemaCrawler AI MCP Server for SQL Server Performance.",
   "timestamp": "2025-01-03T13:24:00Z",
-  "tool": "hello_world",
+  "tool": "version",
   "success": true
 }
 ```
@@ -129,10 +129,10 @@ Example tool structure:
 ```python
 async def my_new_tool(param: str) -> dict[str, Any]:
     """Description of the tool.
-    
+
     Args:
         param: Description of the parameter
-        
+
     Returns:
         JSON object with tool results
     """

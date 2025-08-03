@@ -6,25 +6,23 @@ from typing import Any
 from pydantic import BaseModel, Field
 
 
-class HelloWorldInput(BaseModel):
+class VersionInput(BaseModel):
     """Input model for the hello world tool."""
 
     name: str = Field(description="The name to greet")
 
 
-async def hello_world_tool(name: str) -> dict[str, Any]:
-    """Greets a user with a personalized hello message.
-
-    Args:
-        name: The name to greet
+async def version_tool() -> dict[str, Any]:
+    """
+    Shows version of the SchemaCrawler AI MCP Server for
+    SQL Server Performance server.
 
     Returns:
-        JSON object with greeting message
+        JSON object with version information
     """
-    # Create greeting message
+    # Create version message
     message = (
-        f"Hello, {name}! Welcome to SchemaCrawler AI MCP Server "
-        "for SQL Server Performance."
+        "SchemaCrawler AI MCP Server for SQL Server Performance."
     )
 
     # Return JSON response
@@ -33,6 +31,6 @@ async def hello_world_tool(name: str) -> dict[str, Any]:
         "timestamp": datetime.datetime.now(datetime.UTC)
         .isoformat()
         .replace("+00:00", "Z"),
-        "tool": "hello_world",
+        "tool": "version",
         "success": True,
     }

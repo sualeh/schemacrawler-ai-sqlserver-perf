@@ -14,7 +14,7 @@ class TestMCPServer:
         assert hasattr(server, "name")
         assert server.name == "SchemaCrawler AI MCP Server for SQL Server Performance"
 
-    def test_server_has_hello_world_tool(self):
+    def test_server_has_version_tool(self):
         """Test that the server has the hello world tool registered."""
         server = create_server()
         # This test will need to be updated based on FastMCP's actual API
