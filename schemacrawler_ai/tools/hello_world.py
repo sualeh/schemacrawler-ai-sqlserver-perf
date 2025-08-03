@@ -26,7 +26,7 @@ async def hello_world_tool(name: str) -> dict[str, Any]:
     # Return JSON response
     return {
         "message": message,
-        "timestamp": "2025-01-03T13:24:00Z",
+        "timestamp": datetime.datetime.now(datetime.timezone.utc).isoformat().replace("+00:00", "Z"),
         "tool": "hello_world",
         "success": True,
     }
