@@ -1,0 +1,27 @@
+{
+  "servers": {
+    "local_sse": {
+      "type": "sse",
+      "url": "http://localhost:8000/sse/"
+    },
+    "local_stdio": {
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "sualehfatehi/echo-app"
+      ],
+      "type": "stdio"
+    },
+    "MCP_DOCKER": {
+      "command": "docker",
+      "args": [
+        "mcp",
+        "gateway",
+        "run",
+        "--long-lived"
+      ],
+      "type": "stdio"
+    }
+  }
+}

@@ -25,13 +25,9 @@ def create_server() -> fastmcp.FastMCP:
     return server
 
 
-def main() -> None:
+if __name__ == "__main__":
     """Main entry point for the server."""
     server = create_server()
 
     # Run the server
-    server.run(transport="sse", port=8000)
-
-
-if __name__ == "__main__":
-    main()
+    server.run(transport="stdio")
