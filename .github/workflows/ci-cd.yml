@@ -120,9 +120,10 @@ jobs:
     if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
 
     steps:
-    - id: checkout
-      name: Checkout code
-      uses: actions/checkout@v4
+
+    - id: install-httpie
+      name: Install HTTPie
+      run: pip install httpie
 
     - id: test-docker-image
       name: Test Docker image
@@ -140,7 +141,11 @@ jobs:
         docker ps | grep test-container
 
         echo "Check if sse server is responding"
-        curl -f http://localhost:8000/sse || echo "SSE endpoint not available"
+        http --check-status GET http://localhost:8000/sse Accept:text/event-stream
+        if [ $? -ne 0 ]; then
+          echo "MCP server is not responding as expected"
+          exit 1
+        fi
 
         echo "Stop and remove container"
         docker stop test-container
