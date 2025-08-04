@@ -17,10 +17,10 @@ class TestDatabaseConfig:
             "SCHCRWLR_DATABASE_USER": "testuser",
             "SCHCRWLR_DATABASE_PASSWORD": "testpass"
         }
-        
+
         with patch.dict(os.environ, env_vars, clear=True):
             config = DatabaseConfig.from_environment()
-            
+
             assert config.jdbc_url == "jdbc:sqlserver://localhost:1433;databaseName=testdb"
             assert config.server == "sqlserver"
             assert config.host == "localhost"
@@ -39,10 +39,10 @@ class TestDatabaseConfig:
             "SCHCRWLR_DATABASE_USER": "testuser",
             "SCHCRWLR_DATABASE_PASSWORD": "testpass"
         }
-        
+
         with patch.dict(os.environ, env_vars, clear=True):
             config = DatabaseConfig.from_environment()
-            
+
             assert config.server == "sqlserver"
             assert config.host == "localhost"
             assert config.port == 1433
@@ -60,10 +60,10 @@ class TestDatabaseConfig:
             "SCHCRWLR_DATABASE_USER": "testuser",
             "SCHCRWLR_DATABASE_PASSWORD": "testpass"
         }
-        
+
         with patch.dict(os.environ, env_vars, clear=True):
             config = DatabaseConfig.from_environment()
-            
+
             assert config.port is None
 
     def test_from_environment_missing_credentials(self):
@@ -73,7 +73,7 @@ class TestDatabaseConfig:
             "SCHCRWLR_HOST": "localhost",
             "SCHCRWLR_DATABASE": "testdb"
         }
-        
+
         with patch.dict(os.environ, env_vars, clear=True):
             with pytest.raises(ValueError, match="Database credentials are required"):
                 DatabaseConfig.from_environment()
@@ -85,7 +85,7 @@ class TestDatabaseConfig:
             "SCHCRWLR_DATABASE_USER": "testuser",
             "SCHCRWLR_DATABASE_PASSWORD": "testpass"
         }
-        
+
         with patch.dict(os.environ, env_vars, clear=True):
             with pytest.raises(ValueError, match="Either SCHCRWLR_JDBC_URL or all of the following are required"):
                 DatabaseConfig.from_environment()
@@ -94,7 +94,7 @@ class TestDatabaseConfig:
         """Test JDBC URL parsing for SQL Server with port."""
         jdbc_url = "jdbc:sqlserver://localhost:1433;databaseName=testdb"
         server, host, port, database = DatabaseConfig._parse_jdbc_url(jdbc_url)
-        
+
         assert server == "sqlserver"
         assert host == "localhost"
         assert port == 1433
@@ -104,7 +104,7 @@ class TestDatabaseConfig:
         """Test JDBC URL parsing for SQL Server without port."""
         jdbc_url = "jdbc:sqlserver://localhost;databaseName=testdb"
         server, host, port, database = DatabaseConfig._parse_jdbc_url(jdbc_url)
-        
+
         assert server == "sqlserver"
         assert host == "localhost"
         assert port is None
@@ -114,7 +114,7 @@ class TestDatabaseConfig:
         """Test JDBC URL parsing with multiple properties."""
         jdbc_url = "jdbc:sqlserver://localhost:1433;databaseName=testdb;encrypt=true;trustServerCertificate=true"
         server, host, port, database = DatabaseConfig._parse_jdbc_url(jdbc_url)
-        
+
         assert server == "sqlserver"
         assert host == "localhost"
         assert port == 1433
@@ -178,9 +178,9 @@ class TestDatabaseConfig:
             username="testuser",
             password="testpass"
         )
-        
+
         connection_string = config.get_connection_string()
-        
+
         expected_parts = [
             "DRIVER={ODBC Driver 17 for SQL Server}",
             "SERVER=localhost,1433",
@@ -190,7 +190,7 @@ class TestDatabaseConfig:
             "Encrypt=yes",
             "TrustServerCertificate=yes"
         ]
-        
+
         for part in expected_parts:
             assert part in connection_string
 
@@ -203,9 +203,9 @@ class TestDatabaseConfig:
             username="testuser",
             password="testpass"
         )
-        
+
         connection_string = config.get_connection_string()
-        
+
         assert "SERVER=localhost" in connection_string
         assert "SERVER=localhost," not in connection_string
 
