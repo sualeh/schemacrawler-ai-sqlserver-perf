@@ -54,10 +54,10 @@ jobs:
 
     - id: linting
       name: Run linting
+      if: false
       run: |
         poetry run black --check .
         poetry run ruff check .
-      if: false
 
     - id: type-checking
       name: Run type checking
@@ -104,6 +104,7 @@ jobs:
     - id: build-push
       name: Build and push Docker image
       uses: docker/build-push-action@v5
+      if: false
       with:
         context: .
         platforms: linux/amd64,linux/arm64
@@ -139,6 +140,9 @@ jobs:
 
         echo "Test if the container is running"
         docker ps | grep test-container
+
+        echo "Check if sse server is responding"
+        http --follow --verbose GET http://localhost:8000/sse Accept:text/event-stream
 
         echo "Check if sse server is responding"
         http --check-status GET http://localhost:8000/sse Accept:text/event-stream
