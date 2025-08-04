@@ -48,5 +48,5 @@ testpaths = ["tests"]
 python_files = ["test_*.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
-addopts = "--cov=schemacrawler_ai --cov-report=html --cov-report=term-missing"
+addopts = "--cov=schemacrawler_ai_sqlserver_perf --cov-report=html --cov-report=term-missing"
 asyncio_mode = "auto"

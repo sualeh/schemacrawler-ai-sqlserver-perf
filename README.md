@@ -64,7 +64,7 @@ poetry run black .
 poetry run ruff check .
 
 # Type checking
-poetry run mypy schemacrawler_ai/ --ignore-missing-imports
+poetry run mypy schemacrawler_ai_sqlserver_perf/ --ignore-missing-imports
 ```
 
 ## License
