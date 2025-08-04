@@ -1,9 +1,8 @@
 """Main entry point for the SchemaCrawler AI MCP Server."""
 
-import asyncio
 import logging
 
-from mcp.server import FastMCP
+from fastmcp import FastMCP
 
 from schemacrawler_ai_sqlserver_perf.tools.version_tool import version_tool
 
@@ -15,7 +14,9 @@ logger = logging.getLogger(__name__)
 def create_server() -> FastMCP:
     """Create and configure the MCP server."""
     # Create FastMCP server instance
-    server = FastMCP("SchemaCrawler AI MCP Server for SQL Server Performance")
+    server = FastMCP(
+        "SchemaCrawler AI MCP Server for SQL Server Performance"
+    )
 
     # Register the hello world tool using the decorator
     server.tool()(version_tool)
@@ -29,7 +30,7 @@ def main() -> None:
     server = create_server()
 
     # Run the server
-    server.run()
+    server.run(transport="sse")
 
 
 if __name__ == "__main__":

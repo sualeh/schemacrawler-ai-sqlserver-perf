@@ -139,8 +139,8 @@ jobs:
         echo "Test if the container is running"
         docker ps | grep test-container
 
-        # Basic health check (adjust URL based on your server endpoints)
-        # curl -f http://localhost:8000/health || echo "Health check endpoint not available yet"
+        echo "Check if sse server is responding"
+        curl -f http://localhost:8000/sse || echo "SSE endpoint not available"
 
         echo "Stop and remove container"
         docker stop test-container
