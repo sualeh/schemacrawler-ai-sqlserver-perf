@@ -127,21 +127,21 @@ jobs:
     - id: test-docker-image
       name: Test Docker image
       run: |
-        # Pull the built image
+        echo "Pull the built image"
         docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.ref_name }}
 
-        # Run the container in detached mode
+        echo "Run the container in detached mode"
         docker run -d --name test-container -p 8000:8000 ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.ref_name }}
 
-        # Wait for container to start
+        echo "Wait for container to start"
         sleep 10
 
-        # Test if the container is running
+        echo "Test if the container is running"
         docker ps | grep test-container
 
         # Basic health check (adjust URL based on your server endpoints)
         # curl -f http://localhost:8000/health || echo "Health check endpoint not available yet"
 
-        # Stop and remove container
+        echo "Stop and remove container"
         docker stop test-container
         docker rm test-container
