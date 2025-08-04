@@ -2,7 +2,7 @@
 
 import logging
 
-from fastmcp import FastMCP
+import fastmcp
 
 from schemacrawler_ai_sqlserver_perf.tools.version_tool import version_tool
 
@@ -11,10 +11,10 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-def create_server() -> FastMCP:
+def create_server() -> fastmcp.FastMCP:
     """Create and configure the MCP server."""
     # Create FastMCP server instance
-    server = FastMCP(
+    server = fastmcp.FastMCP(
         "SchemaCrawler AI MCP Server for SQL Server Performance"
     )
 

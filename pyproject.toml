@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "schemacrawler-ai-sqlserver-perf"
+name = "schemacrawler_ai_sqlserver_perf"
 version = "0.1.0"
 description = "SchemaCrawler AI MCP Server for SQL Server Performance Analysis"
 authors = ["Sualeh Fatehi <sualeh@hotmail.com>"]
