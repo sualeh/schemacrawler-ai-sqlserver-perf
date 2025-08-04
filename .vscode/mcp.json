@@ -9,7 +9,7 @@
       "args": [
         "run",
         "-i",
-        "sualehfatehi/echo-app"
+        "schemacrawler/schemacrawler-ai-sqlserver-perf"
       ],
       "type": "stdio"
     },
