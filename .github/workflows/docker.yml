@@ -3,14 +3,15 @@ name: Build and Push Docker Image
 on:
   workflow_dispatch:
   push:
-    branches: [ main ]
     tags: [ 'v*' ]
-  pull_request:
-    branches: [ main ]
 
 env:
   REGISTRY: docker.io
   IMAGE_NAME: schemacrawler/schemacrawler-ai-sqlserver-perf
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build-and-push:
