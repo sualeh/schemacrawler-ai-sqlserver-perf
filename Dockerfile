@@ -44,6 +44,7 @@ COPY --chown=appuser:appuser \
 
 # Switch to non-root user
 USER appuser
+RUN ls -l ./schemacrawler_ai_sqlserver_perf/
 
 # Expose port
 EXPOSE 8000
