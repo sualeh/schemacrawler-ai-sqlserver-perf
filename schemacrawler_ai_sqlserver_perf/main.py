@@ -30,7 +30,7 @@ def main() -> None:
     server = create_server()
 
     # Run the server
-    server.run(transport="sse")
+    server.run(transport="sse", host="0.0.0.0", port=8000)
 
 
 if __name__ == "__main__":
