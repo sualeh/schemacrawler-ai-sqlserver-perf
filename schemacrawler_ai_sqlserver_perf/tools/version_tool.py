@@ -9,8 +9,8 @@ def get_package_version() -> str:
     """Get the package version from metadata."""
     try:
         return importlib.metadata.version("schemacrawler_ai_sqlserver_perf")
-    except importlib.metadata.PackageNotFoundError:
-        # Fallback to reading from pyproject.toml if package not installed
+    except Exception:
+        # Fallback to reading from pyproject.toml if package not installed or other error occurs
         try:
             import tomllib
             import pathlib
