@@ -151,8 +151,8 @@ class DatabaseConfig(BaseModel):
         """Generate SQL Server connection string for pyodbc."""
         parts = []
 
-        # Driver - use ODBC Driver 17 for SQL Server (most common)
-        parts.append("DRIVER={ODBC Driver 17 for SQL Server}")
+        # Driver - use ODBC Driver for SQL Server
+        parts.append("DRIVER={ODBC Driver 18 for SQL Server}")
 
         # Server
         if self.port:
