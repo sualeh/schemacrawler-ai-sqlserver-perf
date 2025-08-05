@@ -1,15 +1,31 @@
-"""Hello World MCP tool."""
+"""Version MCP tool."""
 
 import datetime
+import importlib.metadata
 from typing import Any
 
-from pydantic import BaseModel, Field
 
-
-class VersionInput(BaseModel):
-    """Input model for the hello world tool."""
-
-    name: str = Field(description="The name to greet")
+def get_package_version() -> str:
+    """Get the package version from metadata."""
+    try:
+        return importlib.metadata.version("schemacrawler_ai_sqlserver_perf")
+    except importlib.metadata.PackageNotFoundError:
+        # Fallback to reading from pyproject.toml if package not installed
+        try:
+            import tomllib
+            import pathlib
+            
+            # Get the project root directory (3 levels up from this file)
+            project_root = pathlib.Path(__file__).parent.parent.parent
+            pyproject_path = project_root / "pyproject.toml"
+            
+            if pyproject_path.exists():
+                with open(pyproject_path, "rb") as f:
+                    data = tomllib.load(f)
+                    return data.get("project", {}).get("version", "Unknown")
+        except Exception:
+            pass
+        return "Unknown"
 
 
 async def version_tool() -> dict[str, Any]:
@@ -20,12 +36,18 @@ async def version_tool() -> dict[str, Any]:
     Returns:
         JSON object with version information
     """
+    # Get package version
+    version = get_package_version()
+    
     # Create version message
-    message = "SchemaCrawler AI MCP Server for SQL Server Performance."
+    server_name = "SchemaCrawler AI MCP Server for SQL Server Performance"
+    message = f"{server_name} version {version}."
 
     # Return JSON response
     return {
         "message": message,
+        "server_name": server_name,
+        "version": version,
         "timestamp": datetime.datetime.now(datetime.UTC)
         .isoformat()
         .replace("+00:00", "Z"),
