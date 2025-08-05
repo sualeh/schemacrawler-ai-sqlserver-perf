@@ -1,9 +1,5 @@
 {
   "servers": {
-    "local_sse": {
-      "type": "sse",
-      "url": "http://localhost:8000/sse/"
-    },
     "local_stdio": {
       "command": "docker",
       "args": [
