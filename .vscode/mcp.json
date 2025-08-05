@@ -9,6 +9,12 @@
       "args": [
         "run",
         "-i",
+        "-e", "SCHCRWLR_SERVER=sqlserver",
+        "-e", "SCHCRWLR_HOST=localhost",
+        "-e", "SCHCRWLR_PORT=1433",
+        "-e", "SCHCRWLR_DATABASE=master",
+        "-e", "SCHCRWLR_DATABASE_USER=admin",
+        "-e", "SCHCRWLR_DATABASE_PASSWORD=p@ssw0rd",
         "schemacrawler/schemacrawler-ai-sqlserver-perf"
       ],
       "type": "stdio"
