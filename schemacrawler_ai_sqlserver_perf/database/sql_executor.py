@@ -111,9 +111,13 @@ class SQLExecutor:
                 # Convert to list of dictionaries
                 results = []
                 for row in rows:
+                    if len(row) != len(columns):
+                        raise SQLExecutionError(
+                            f"Row length ({len(row)}) does not match number of columns ({len(columns)})."
+                        )
                     row_dict = {}
                     for i, value in enumerate(row):
-                        column_name = columns[i] if i < len(columns) else f"column_{i}"
+                        column_name = columns[i]
                         # Handle different data types for JSON serialization
                         if isinstance(value, (datetime.datetime, datetime.date)):
                             row_dict[column_name] = value.isoformat()
