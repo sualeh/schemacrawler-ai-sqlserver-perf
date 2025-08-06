@@ -77,7 +77,7 @@ async def column_statistics_tool(
         }
 
         # Execute SQL template to get column statistics
-        result = execute_sql_template(COLUMN_STATISTICS_SQL_TEMPLATE, substitutions)
+        result = await execute_sql_template(COLUMN_STATISTICS_SQL_TEMPLATE, substitutions)
 
         if result["success"]:
             # Return data as-is: empty list if no data, or the actual data list
