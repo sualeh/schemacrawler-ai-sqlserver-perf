@@ -30,9 +30,17 @@ class SQLExecutor:
         
         Args:
             config: Database configuration. If None, reads from environment.
+        
+        Raises:
+            SQLExecutionError: If environment configuration is invalid or missing.
         """
-        self.config = config or DatabaseConfig.from_environment()
-
+        if config is not None:
+            self.config = config
+        else:
+            try:
+                self.config = DatabaseConfig.from_environment()
+            except Exception as e:
+                raise SQLExecutionError(f"Failed to load database configuration from environment: {str(e)}") from e
     def substitute_template(self, sql_template: str, substitutions: Dict[str, Any]) -> str:
         """Substitute variables in SQL template.
         
