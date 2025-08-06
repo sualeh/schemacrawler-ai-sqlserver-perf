@@ -1,7 +1,7 @@
 """Tests for database connection tool using SQL executor."""
 
 import pytest
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 
 from schemacrawler_ai_sqlserver_perf.tools.database_connection_tool import (
     database_connection_tool,

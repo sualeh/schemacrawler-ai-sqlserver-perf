@@ -3,8 +3,7 @@
 import datetime
 import logging
 import re
-from typing import Any, Dict, List, Optional, Union
-from contextlib import contextmanager
+from typing import Any, Dict, List, Optional
 
 from .config import DatabaseConfig
 from .connection import create_connection

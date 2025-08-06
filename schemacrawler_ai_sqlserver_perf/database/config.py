@@ -1,9 +1,7 @@
 """Database configuration module for environment variable handling."""
 
 import os
-import re
 from typing import Optional
-from urllib.parse import urlparse
 
 from pydantic import BaseModel, Field, field_validator
 

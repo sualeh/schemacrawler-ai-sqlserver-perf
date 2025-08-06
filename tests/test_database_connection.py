@@ -1,7 +1,7 @@
 """Tests for database connection module."""
 
 import os
-from unittest.mock import patch, MagicMock, call
+from unittest.mock import patch, MagicMock
 import pytest
 
 from schemacrawler_ai_sqlserver_perf.database.config import DatabaseConfig

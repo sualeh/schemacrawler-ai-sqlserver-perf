@@ -1,7 +1,7 @@
 """Tests for SQL executor module."""
 
 import datetime
-from unittest.mock import MagicMock, patch, call
+from unittest.mock import MagicMock, patch
 import pytest
 
 from schemacrawler_ai_sqlserver_perf.database.config import DatabaseConfig
