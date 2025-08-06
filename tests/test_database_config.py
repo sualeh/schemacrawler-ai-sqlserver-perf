@@ -15,13 +15,15 @@ class TestDatabaseConfig:
         env_vars = {
             "SCHCRWLR_JDBC_URL": "jdbc:sqlserver://localhost:1433;databaseName=testdb",
             "SCHCRWLR_DATABASE_USER": "testuser",
-            "SCHCRWLR_DATABASE_PASSWORD": "testpass"
+            "SCHCRWLR_DATABASE_PASSWORD": "testpass",
         }
 
         with patch.dict(os.environ, env_vars, clear=True):
             config = DatabaseConfig.from_environment()
 
-            assert config.jdbc_url == "jdbc:sqlserver://localhost:1433;databaseName=testdb"
+            assert (
+                config.jdbc_url == "jdbc:sqlserver://localhost:1433;databaseName=testdb"
+            )
             assert config.server == "sqlserver"
             assert config.host == "localhost"
             assert config.port == 1433
@@ -37,7 +39,7 @@ class TestDatabaseConfig:
             "SCHCRWLR_PORT": "1433",
             "SCHCRWLR_DATABASE": "testdb",
             "SCHCRWLR_DATABASE_USER": "testuser",
-            "SCHCRWLR_DATABASE_PASSWORD": "testpass"
+            "SCHCRWLR_DATABASE_PASSWORD": "testpass",
         }
 
         with patch.dict(os.environ, env_vars, clear=True):
@@ -58,7 +60,7 @@ class TestDatabaseConfig:
             "SCHCRWLR_HOST": "localhost",
             "SCHCRWLR_DATABASE": "testdb",
             "SCHCRWLR_DATABASE_USER": "testuser",
-            "SCHCRWLR_DATABASE_PASSWORD": "testpass"
+            "SCHCRWLR_DATABASE_PASSWORD": "testpass",
         }
 
         with patch.dict(os.environ, env_vars, clear=True):
@@ -71,7 +73,7 @@ class TestDatabaseConfig:
         env_vars = {
             "SCHCRWLR_SERVER": "sqlserver",
             "SCHCRWLR_HOST": "localhost",
-            "SCHCRWLR_DATABASE": "testdb"
+            "SCHCRWLR_DATABASE": "testdb",
         }
 
         with patch.dict(os.environ, env_vars, clear=True):
@@ -83,11 +85,14 @@ class TestDatabaseConfig:
         env_vars = {
             "SCHCRWLR_HOST": "localhost",
             "SCHCRWLR_DATABASE_USER": "testuser",
-            "SCHCRWLR_DATABASE_PASSWORD": "testpass"
+            "SCHCRWLR_DATABASE_PASSWORD": "testpass",
         }
 
         with patch.dict(os.environ, env_vars, clear=True):
-            with pytest.raises(ValueError, match="Either SCHCRWLR_JDBC_URL or all of the following are required"):
+            with pytest.raises(
+                ValueError,
+                match="Either SCHCRWLR_JDBC_URL or all of the following are required",
+            ):
                 DatabaseConfig.from_environment()
 
     def test_parse_jdbc_url_sqlserver_with_port(self):
@@ -142,7 +147,7 @@ class TestDatabaseConfig:
             host="localhost",
             database="testdb",
             username="user",
-            password="pass"
+            password="pass",
         )
         assert config.server == "sqlserver"
 
@@ -153,7 +158,7 @@ class TestDatabaseConfig:
             host="localhost",
             database="testdb",
             username="user",
-            password="pass"
+            password="pass",
         )
         assert config.server == "sqlserver"
 
@@ -165,7 +170,7 @@ class TestDatabaseConfig:
                 host="localhost",
                 database="testdb",
                 username="user",
-                password="pass"
+                password="pass",
             )
 
     def test_get_connection_string_sqlserver(self):
@@ -176,7 +181,7 @@ class TestDatabaseConfig:
             port=1433,
             database="testdb",
             username="testuser",
-            password="testpass"
+            password="testpass",
         )
 
         connection_string = config.get_connection_string()
@@ -188,7 +193,7 @@ class TestDatabaseConfig:
             "UID=testuser",
             "PWD=testpass",
             "Encrypt=yes",
-            "TrustServerCertificate=yes"
+            "TrustServerCertificate=yes",
         ]
 
         for part in expected_parts:
@@ -201,7 +206,7 @@ class TestDatabaseConfig:
             host="localhost",
             database="testdb",
             username="testuser",
-            password="testpass"
+            password="testpass",
         )
 
         connection_string = config.get_connection_string()
@@ -217,5 +222,5 @@ class TestDatabaseConfig:
                 host="localhost",
                 database="testdb",
                 username="user",
-                password="pass"
+                password="pass",
             )

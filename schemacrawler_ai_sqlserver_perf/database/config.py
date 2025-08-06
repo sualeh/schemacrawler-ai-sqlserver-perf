@@ -12,7 +12,9 @@ class DatabaseConfig(BaseModel):
     """Database configuration from environment variables."""
 
     # Connection parameters
-    server: Optional[str] = Field(None, description="Database server type (e.g., sqlserver)")
+    server: Optional[str] = Field(
+        None, description="Database server type (e.g., sqlserver)"
+    )
     host: Optional[str] = Field(None, description="Database host")
     port: Optional[int] = Field(None, description="Database port")
     database: Optional[str] = Field(None, description="Database name")
@@ -52,7 +54,7 @@ class DatabaseConfig(BaseModel):
                 port=port,
                 database=database,
                 username=username,
-                password=password
+                password=password,
             )
         else:
             # Get individual connection parameters
@@ -76,7 +78,7 @@ class DatabaseConfig(BaseModel):
                 port=port,
                 database=database,
                 username=username,
-                password=password
+                password=password,
             )
 
     @staticmethod
@@ -137,7 +139,9 @@ class DatabaseConfig(BaseModel):
     def validate_server(cls, v):
         """Validate server type."""
         if v and v.lower() not in ["sqlserver"]:
-            raise ValueError(f"Unsupported server type: {v}. Only 'sqlserver' is currently supported.")
+            raise ValueError(
+                f"Unsupported server type: {v}. Only 'sqlserver' is currently supported."
+            )
         return v.lower() if v else v
 
     def get_connection_string(self) -> str:
