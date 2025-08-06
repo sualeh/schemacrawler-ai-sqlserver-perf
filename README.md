@@ -2,6 +2,16 @@
 
 This is a Python MCP Server using Fast MCP. Each MCP tool will make a connection to a database, execute SQL and return the results as JSON. The SQL is hardcoded but is a template - parts of the SQL including table names may be replaced based on tool parameters.
 
+## Available MCP Tools
+
+### Database Connection Tool
+Tests database connectivity and returns SQL Server version information.
+
+### Column Statistics Tool
+Analyzes table structure and provides column metadata including data types, nullability, precision, and table row counts. Accepts database name, schema name, and table name as parameters and returns results in INFORMATION_SCHEMA format for easy identification.
+
+For detailed documentation on the Column Statistics Tool, see [COLUMN_STATISTICS_TOOL.md](COLUMN_STATISTICS_TOOL.md).
+
 ## Development
 
 1. Clone the repository:
