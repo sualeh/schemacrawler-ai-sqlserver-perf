@@ -1,54 +1,12 @@
-# SQL Server Performance
+# SQL Server Performance Queries
 
-## Copilot Coding Agent Instructions
-
-0. "README"
-   - > This is a Python MCP Server using Fast MCP. Each MCP tool will make a connection to a database, execute SQL and return the results as JSON. The SQL is hardcoded but is a template - parts of the SQL including table names may be replaced based on tool parameters.
-1. Create "copilot-setup-steps.yml"
-   - Configure a custom workflow file (".github/workflows/copilot-setup-steps.yml") to install necessary dependencies and tools the GitHub Copilot agent will need to work on the Python Poetry project intended for Docker deployment.
-2. Basic project structure CI/CD
-   - Create a Poetry project using the latest version of Poetry. Use the latest version of Python. Use the latest version of Fast MCP. Write a simple "Hello, World" tool that takes a name parameter, and greets you with a message, returning a JSON object with the message. All MCP Server tools will be in a separate Python module. Allow for additional tools to be written in the future. Allow for additional Python modules in the future as well.
-   - Create coverage tests, and test that the code is working. The code should compile, and all tests should pass. Unit tests should run as part of the Poetry project build.
-   - Package as a Docker image, using the Docker builder pattern. The Docker image should support ARM as well as AMD64 architectures.
-   - Write a GitHub Actions workflow that will build the project, and deploy it to Docker Hub.
-   - Validate that the build works in every respect before closing the issue.
-3. Database connection module
-   - Create a Python module that reads environmental variables and allows callers to make a database connection programatically.
-   - Create a connection - use one of two ways:
-     1. From a JDBC connection URL: parse the connection string to create a connection
-        - `SCHCRWLR_JDBC_URL` - JDBC URL for database connection
-     2. From environmental variables:
-        - `SCHCRWLR_SERVER` - Database server type, for example "oracle" or "sqlserver"
-        - `SCHCRWLR_HOST` - Database host
-        - `SCHCRWLR_PORT` - Database port
-        - `SCHCRWLR_DATABASE` - Database name
-   - Database credentials will be provided in the following environmental variables
-        - `SCHCRWLR_DATABASE_USER`
-        - `SCHCRWLR_DATABASE_PASSWORD`
-   - Support only Microsoft SQL Server on Linux and Windows 11. In the future, Oracle, IBM DB2, Microsoft SQL Server, PostgreSQL, MySQL, SQLite will be supported, so the connection code should be written in an extensible way. It should be a reusable module. Make sure drivers for the databases for all platforms are bundled as dependencies.
-   - The database connection should be validated (and then closed) as soon as the server starts. If a database connection cannot be made, the server should terminate with an error code.
-   - Create coverage tests, and test that the code is working. The code should compile, and all tests should pass.
-4. SQL templating and execution module
-   - Create a base framework as a separate Python module that can accept SQL and return JSON. Each tool will use this module, and simply pass in a SQL template and a dictionary of substitutions based on its parameters. These parameters will get substituted into the SQL template. Note that this is true templating, not parameterized queries.
-   - Every tool call should create a new connection, run the SQL, and then close the connection. A connection pool may be used. If there are any errors or timeouts, the tool call should return as detailed an error message as possible as JSON.
-   - The tool will return the data from the results as a list of dictionaries. Each dictionary represents one rows of the results of the query. This data is returned JSON.
-   - As a first step towards creating tools using this template, convert the existing tool for getting database connection information to use this new module, and pass in the required SQL template to get the database connection information.
-   - Create tests that can mock query results, and test that the code is working. The code should compile, and all tests should pass.
-5. First tool implementation
-   - Create the first tool that lists table column statistics like min/ max values, null values count, distinct values count, and total count for columns in a given table. The fully qualified table name is passed in as a parameter (or 3 parameters - database name, schema name and table name) to the tool, and the table name details are substituted into the schema. The return results should have the database name, schema name and table name in the same format as in the INFORMATION_SCHEMA for easy identification.
-   - This tool will rely on the database connection module as well as the SQL templating and execution module.
-   - Create tests that can mock query results, and test that the code is working. The code should compile, and all tests should pass.
-
-
-## Performance Queries
-
-### Prompt
+## Prompt
 
 > I am trying to understand what this means for SQL Server - "SQL performance metrics - such as query execution times, waits, resource usage are captured in DMVs which may require separate set of tools to analyze." Whare the common questions DBAs would like to get answered? What are the queries that can answer them?
 
-### Queries
+## Queries
 
-#### Note on Top 10 Queries
+### Note on Top 10 Queries
 
 The `ORDER BY` clause and the column being *aggregated and analyzed* in the `SELECT` clause are tied together. That’s the true pivot.
 
@@ -61,7 +19,7 @@ Here’s a breakdown:
 | Latency-centric        | `total_elapsed_time / execution_count` | `ORDER BY avg_elapsed_time DESC` | Longest end-to-end duration per execution    |
 
 
-#### Top 10 by CPU Usage (Worker Time)
+### Top 10 by CPU Usage (Worker Time)
 
 ```sql
 /*
@@ -103,7 +61,7 @@ ORDER BY avg_cpu_time DESC;
 ```
 
 
-#### Top 10 by Logical Reads
+### Top 10 by Logical Reads
 
 ```sql
 /*
@@ -146,7 +104,7 @@ ORDER BY avg_logical_reads DESC;
 ```
 
 
-#### Top 10 by Elapsed Time (Duration)
+### Top 10 by Elapsed Time (Duration)
 
 ```sql
 /*
@@ -189,7 +147,7 @@ ORDER BY avg_elapsed_time DESC;
 ```
 
 
-#### Monitor live activity and blocking
+### Monitor live activity and blocking
 
 ```sql
 /*
@@ -238,7 +196,7 @@ WHERE r.blocking_session_id <> 0;
 ```
 
 
-#### Cached Plans with Reuse Info
+### Cached Plans with Reuse Info
 
 ```sql
 /*
@@ -282,7 +240,7 @@ ORDER BY cp.usecounts DESC;
 ```
 
 
-#### Detect Plan Cache Bloat
+### Detect Plan Cache Bloat
 
 ```sql
 /*
@@ -326,7 +284,7 @@ WHERE cp.objtype = 'Adhoc'
 ORDER BY cp.size_in_bytes DESC;
 ```
 
-#### Active Blocking & Waits
+### Active Blocking & Waits
 
 ```sql
 /*
@@ -375,7 +333,7 @@ WHERE r.blocking_session_id <> 0;
 ```
 
 
-#### Detect Lock Contention
+### Detect Lock Contention
 
 ```sql
 /*
@@ -428,7 +386,7 @@ CROSS APPLY sys.dm_exec_sql_text(r.sql_handle) t;
 ```
 
 
-#### Analyze Wait Statistics
+### Analyze Wait Statistics
 
 ```sql
 /*
