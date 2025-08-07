@@ -170,7 +170,7 @@ class DatabaseConfig(BaseModel):
         parts.append(f"PWD={self.password}")
 
         # Additional settings for better compatibility
-        parts.append("Encrypt=yes")
+        parts.append("Encrypt=no")
         parts.append("TrustServerCertificate=yes")
 
         return ";".join(parts)
