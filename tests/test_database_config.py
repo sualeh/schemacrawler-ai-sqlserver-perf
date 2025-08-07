@@ -10,10 +10,17 @@ from schemacrawler_ai_sqlserver_perf.database.config import DatabaseConfig
 class TestDatabaseConfig:
     """Test suite for DatabaseConfig."""
 
-    def test_from_environment_with_jdbc_url(self):
-        """Test configuration creation from JDBC URL."""
+    def test_from_environment_with_connection_url(self):
+        """Test configuration creation from connection URL."""
+        connection_string = (
+            "DRIVER={ODBC Driver 18 for SQL Server};"
+            "SERVER=localhost,1433;"
+            "DATABASE=testdb;"
+            "UID=testuser;"
+            "PWD=testpass"
+        )
         env_vars = {
-            "SCHCRWLR_JDBC_URL": "jdbc:sqlserver://localhost:1433;databaseName=testdb",
+            "SCHCRWLR_CONNECTION_URL": connection_string,
             "SCHCRWLR_DATABASE_USER": "testuser",
             "SCHCRWLR_DATABASE_PASSWORD": "testpass",
         }
@@ -21,13 +28,11 @@ class TestDatabaseConfig:
         with patch.dict(os.environ, env_vars, clear=True):
             config = DatabaseConfig.from_environment()
 
-            assert (
-                config.jdbc_url == "jdbc:sqlserver://localhost:1433;databaseName=testdb"
-            )
-            assert config.server == "sqlserver"
-            assert config.host == "localhost"
-            assert config.port == 1433
-            assert config.database == "testdb"
+            assert config.connection_url == connection_string
+            assert config.server is None
+            assert config.host is None
+            assert config.port is None
+            assert config.database is None
             assert config.username == "testuser"
             assert config.password == "testpass"
 
@@ -51,7 +56,7 @@ class TestDatabaseConfig:
             assert config.database == "testdb"
             assert config.username == "testuser"
             assert config.password == "testpass"
-            assert config.jdbc_url is None
+            assert config.connection_url is None
 
     def test_from_environment_without_port(self):
         """Test configuration creation without port specification."""
@@ -91,54 +96,10 @@ class TestDatabaseConfig:
         with patch.dict(os.environ, env_vars, clear=True):
             with pytest.raises(
                 ValueError,
-                match="Either SCHCRWLR_JDBC_URL or all of the following are required",
+                match="Either SCHCRWLR_CONNECTION_URL or all of the following "
+                      "are required",
             ):
                 DatabaseConfig.from_environment()
-
-    def test_parse_jdbc_url_sqlserver_with_port(self):
-        """Test JDBC URL parsing for SQL Server with port."""
-        jdbc_url = "jdbc:sqlserver://localhost:1433;databaseName=testdb"
-        server, host, port, database = DatabaseConfig._parse_jdbc_url(jdbc_url)
-
-        assert server == "sqlserver"
-        assert host == "localhost"
-        assert port == 1433
-        assert database == "testdb"
-
-    def test_parse_jdbc_url_sqlserver_without_port(self):
-        """Test JDBC URL parsing for SQL Server without port."""
-        jdbc_url = "jdbc:sqlserver://localhost;databaseName=testdb"
-        server, host, port, database = DatabaseConfig._parse_jdbc_url(jdbc_url)
-
-        assert server == "sqlserver"
-        assert host == "localhost"
-        assert port is None
-        assert database == "testdb"
-
-    def test_parse_jdbc_url_complex_properties(self):
-        """Test JDBC URL parsing with multiple properties."""
-        jdbc_url = "jdbc:sqlserver://localhost:1433;databaseName=testdb;encrypt=true;trustServerCertificate=true"
-        server, host, port, database = DatabaseConfig._parse_jdbc_url(jdbc_url)
-
-        assert server == "sqlserver"
-        assert host == "localhost"
-        assert port == 1433
-        assert database == "testdb"
-
-    def test_parse_jdbc_url_invalid_format(self):
-        """Test JDBC URL parsing with invalid format."""
-        with pytest.raises(ValueError, match="Invalid JDBC URL format"):
-            DatabaseConfig._parse_jdbc_url("invalid_url")
-
-    def test_parse_jdbc_url_unsupported_database(self):
-        """Test JDBC URL parsing with unsupported database type."""
-        with pytest.raises(ValueError, match="Unsupported database type"):
-            DatabaseConfig._parse_jdbc_url("jdbc:mysql://localhost:3306/testdb")
-
-    def test_parse_jdbc_url_missing_database_name(self):
-        """Test JDBC URL parsing without database name."""
-        with pytest.raises(ValueError, match="Invalid SQL Server JDBC URL format"):
-            DatabaseConfig._parse_jdbc_url("jdbc:sqlserver://localhost:1433")
 
     def test_validate_server_sqlserver(self):
         """Test server validation for SQL Server."""
@@ -198,6 +159,25 @@ class TestDatabaseConfig:
 
         for part in expected_parts:
             assert part in connection_string
+
+    def test_get_connection_string_with_connection_url(self):
+        """Test connection string generation with connection URL."""
+        connection_url = (
+            "DRIVER={ODBC Driver 18 for SQL Server};"
+            "SERVER=localhost,1433;"
+            "DATABASE=testdb;"
+            "UID=testuser;"
+            "PWD=testpass"
+        )
+        config = DatabaseConfig(
+            connection_url=connection_url,
+            username="testuser",
+            password="testpass",
+        )
+
+        connection_string = config.get_connection_string()
+
+        assert connection_string == connection_url
 
     def test_get_connection_string_sqlserver_no_port(self):
         """Test SQL Server connection string generation without port."""

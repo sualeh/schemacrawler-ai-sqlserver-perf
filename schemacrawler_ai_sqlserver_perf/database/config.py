@@ -17,8 +17,10 @@ class DatabaseConfig(BaseModel):
     port: Optional[int] = Field(None, description="Database port")
     database: Optional[str] = Field(None, description="Database name")
 
-    # JDBC URL (alternative to individual parameters)
-    jdbc_url: Optional[str] = Field(None, description="JDBC connection URL")
+    # Connection URL (alternative to individual parameters)
+    connection_url: Optional[str] = Field(
+        None, description="Database connection URL"
+    )
 
     # Credentials (required)
     username: str = Field(..., description="Database username")
@@ -39,18 +41,13 @@ class DatabaseConfig(BaseModel):
                 "SCHCRWLR_DATABASE_USER and SCHCRWLR_DATABASE_PASSWORD"
             )
 
-        # Get JDBC URL if provided
-        jdbc_url = os.getenv("SCHCRWLR_JDBC_URL")
+        # Get connection URL if provided
+        connection_url = os.getenv("SCHCRWLR_CONNECTION_URL")
 
-        if jdbc_url:
-            # Parse JDBC URL to extract connection parameters
-            server, host, port, database = cls._parse_jdbc_url(jdbc_url)
+        if connection_url:
+            # Use connection URL directly without parsing
             return cls(
-                jdbc_url=jdbc_url,
-                server=server,
-                host=host,
-                port=port,
-                database=database,
+                connection_url=connection_url,
                 username=username,
                 password=password,
             )
@@ -64,8 +61,9 @@ class DatabaseConfig(BaseModel):
             # Validate required parameters
             if not all([server, host, database]):
                 raise ValueError(
-                    "Either SCHCRWLR_JDBC_URL or all of the following are required: "
-                    "SCHCRWLR_SERVER, SCHCRWLR_HOST, SCHCRWLR_DATABASE"
+                    "Either SCHCRWLR_CONNECTION_URL or all of the following "
+                    "are required: SCHCRWLR_SERVER, SCHCRWLR_HOST, "
+                    "SCHCRWLR_DATABASE"
                 )
 
             port = int(port_str) if port_str else None
@@ -79,78 +77,29 @@ class DatabaseConfig(BaseModel):
                 password=password,
             )
 
-    @staticmethod
-    def _parse_jdbc_url(jdbc_url: str) -> tuple[str, str, Optional[int], str]:
-        """Parse JDBC URL to extract connection parameters.
-
-        Supports formats like:
-        - jdbc:sqlserver://host:port;databaseName=dbname
-        - jdbc:sqlserver://host;databaseName=dbname
-        """
-        if not jdbc_url.startswith("jdbc:"):
-            raise ValueError(f"Invalid JDBC URL format: {jdbc_url}")
-
-        # Remove jdbc: prefix and extract the database type
-        url_without_jdbc = jdbc_url[5:]  # Remove "jdbc:"
-
-        # Parse the database type (e.g., "sqlserver")
-        if "://" not in url_without_jdbc:
-            raise ValueError(f"Invalid JDBC URL format: {jdbc_url}")
-
-        server_type, connection_part = url_without_jdbc.split("://", 1)
-
-        # Parse SQL Server format: host:port;databaseName=dbname
-        if server_type == "sqlserver":
-            # Split on semicolon to separate host:port from properties
-            if ";" in connection_part:
-                host_port_part, properties_part = connection_part.split(";", 1)
-
-                # Extract database name from properties
-                database = None
-                for prop in properties_part.split(";"):
-                    if prop.startswith("databaseName="):
-                        database = prop.split("=", 1)[1]
-                        break
-
-                if not database:
-                    raise ValueError(f"No databaseName found in JDBC URL: {jdbc_url}")
-
-                # Parse host and port
-                if ":" in host_port_part:
-                    host, port_str = host_port_part.rsplit(":", 1)
-                    try:
-                        port = int(port_str)
-                    except ValueError:
-                        raise ValueError(f"Invalid port in JDBC URL: {jdbc_url}")
-                else:
-                    host = host_port_part
-                    port = None
-
-                return server_type, host, port, database
-            else:
-                raise ValueError(f"Invalid SQL Server JDBC URL format: {jdbc_url}")
-        else:
-            raise ValueError(f"Unsupported database type in JDBC URL: {server_type}")
-
     @field_validator("server")
     @classmethod
     def validate_server(cls, v):
         """Validate server type."""
         if v and v.lower() not in ["sqlserver"]:
             raise ValueError(
-                f"Unsupported server type: {v}. Only 'sqlserver' is currently supported."
+                f"Unsupported server type: {v}. Only 'sqlserver' is currently "
+                "supported."
             )
         return v.lower() if v else v
 
     def get_connection_string(self) -> str:
         """Generate a connection string for the database."""
-        if self.server == "sqlserver":
+        if self.connection_url:
+            # Use the connection URL directly as ODBC connection string
+            return self.connection_url
+        elif self.server == "sqlserver":
             return self._get_sqlserver_connection_string()
         else:
             raise ValueError(f"Unsupported server type: {self.server}")
 
     def _get_sqlserver_connection_string(self) -> str:
-        """Generate SQL Server connection string for pyodbc."""
+        """Generate SQL Server ODBC connection string for pyodbc."""
         parts = []
 
         # Driver - use ODBC Driver for SQL Server
@@ -170,7 +119,7 @@ class DatabaseConfig(BaseModel):
         parts.append(f"PWD={self.password}")
 
         # Additional settings for better compatibility
-        parts.append("Encrypt=no")
+        parts.append("Encrypt=yes")
         parts.append("TrustServerCertificate=yes")
         parts.append("SSLProtocol=TLSv1.2")
 
