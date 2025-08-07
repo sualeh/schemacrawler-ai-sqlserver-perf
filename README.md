@@ -7,6 +7,14 @@ This is a Python MCP Server using Fast MCP. Each MCP tool will make a connection
 ### Database Connection Tool
 Tests database connectivity and returns SQL Server version information.
 
+### Top 10 Queries Tool
+Retrieves the top 10 SQL queries by performance metrics from SQL Server Dynamic Management Views (DMVs). Accepts a metric parameter to choose the ordering criteria:
+- **cpu**: Top 10 queries by average CPU time (worker time) per execution
+- **reads**: Top 10 queries by average logical reads per execution
+- **time**: Top 10 queries by average elapsed time per execution
+
+Returns query text, execution count, and relevant performance metrics for performance analysis and optimization.
+
 ### Column Statistics Tool
 Analyzes table structure and provides column metadata including data types, nullability, precision, and table row counts. Accepts database name, schema name, and table name as parameters and returns results in INFORMATION_SCHEMA format for easy identification.
 

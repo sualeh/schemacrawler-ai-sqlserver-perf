@@ -54,7 +54,7 @@ class TestTopQueriesTool:
     def test_sql_templates_exist(self):
         """Test that all required SQL templates are defined."""
         expected_metrics = ["cpu", "reads", "time"]
-        
+
         for metric in expected_metrics:
             assert metric in SQL_TEMPLATES
             assert isinstance(SQL_TEMPLATES[metric], str)
@@ -63,12 +63,16 @@ class TestTopQueriesTool:
     def test_sql_templates_contain_top_10(self):
         """Test that all SQL templates contain TOP 10 clause."""
         for metric, sql_template in SQL_TEMPLATES.items():
-            assert "TOP 10" in sql_template, f"SQL template for {metric} should contain 'TOP 10'"
+            assert (
+                "TOP 10" in sql_template
+            ), f"SQL template for {metric} should contain 'TOP 10'"
 
     def test_sql_templates_contain_order_by(self):
         """Test that all SQL templates contain ORDER BY clause."""
         for metric, sql_template in SQL_TEMPLATES.items():
-            assert "ORDER BY" in sql_template, f"SQL template for {metric} should contain 'ORDER BY'"
+            assert (
+                "ORDER BY" in sql_template
+            ), f"SQL template for {metric} should contain 'ORDER BY'"
 
     def test_sql_template_cpu_structure(self):
         """Test CPU template has correct structure."""

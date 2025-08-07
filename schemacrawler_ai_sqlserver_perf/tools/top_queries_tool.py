@@ -67,7 +67,7 @@ async def top_queries_tool(
     Args:
         metric: The performance metric to order by:
                 - "cpu": Order by average CPU time (worker time) per execution
-                - "reads": Order by average logical reads per execution  
+                - "reads": Order by average logical reads per execution
                 - "time": Order by average elapsed time per execution
 
     Returns:
