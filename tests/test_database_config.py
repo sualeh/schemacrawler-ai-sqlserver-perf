@@ -187,7 +187,7 @@ class TestDatabaseConfig:
         connection_string = config.get_connection_string()
 
         expected_parts = [
-            "DRIVER={ODBC Driver 17 for SQL Server}",
+            "DRIVER={ODBC Driver 18 for SQL Server}",
             "SERVER=localhost,1433",
             "DATABASE=testdb",
             "UID=testuser",
