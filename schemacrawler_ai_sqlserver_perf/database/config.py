@@ -172,5 +172,6 @@ class DatabaseConfig(BaseModel):
         # Additional settings for better compatibility
         parts.append("Encrypt=no")
         parts.append("TrustServerCertificate=yes")
+        parts.append("SSLProtocol=TLSv1.2")
 
         return ";".join(parts)
