@@ -1,7 +1,5 @@
 """Tests for top queries tool."""
 
-import pytest
-from unittest.mock import patch, MagicMock
 
 
 # SQL templates from the tool
