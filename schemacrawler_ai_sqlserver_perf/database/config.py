@@ -18,9 +18,7 @@ class DatabaseConfig(BaseModel):
     database: Optional[str] = Field(None, description="Database name")
 
     # Connection URL (alternative to individual parameters)
-    connection_url: Optional[str] = Field(
-        None, description="Database connection URL"
-    )
+    connection_url: Optional[str] = Field(None, description="Database connection URL")
 
     # Credentials (required)
     username: str = Field(..., description="Database username")
