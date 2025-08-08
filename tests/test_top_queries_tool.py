@@ -47,7 +47,7 @@ ORDER BY avg_elapsed_time DESC;
 """,
 }
 
-from my_tool_module import SQL_TEMPLATES
+
 class TestTopQueriesTool:
     """Test suite for top_queries_tool."""
 

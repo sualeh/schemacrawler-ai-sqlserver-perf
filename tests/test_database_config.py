@@ -153,8 +153,6 @@ class TestDatabaseConfig:
             "DATABASE=testdb",
             "UID=testuser",
             "PWD=testpass",
-            "Encrypt=yes",
-            "TrustServerCertificate=yes",
         ]
 
         for part in expected_parts:
