@@ -167,6 +167,7 @@ ORDER BY avg_elapsed_time DESC;
       indicating that the session is being blocked by another session.
 
   Output Fields:
+    - query_text: The exact SQL statement being executed by the blocked session.
     - blocked_session: ID of the session experiencing blocking.
     - blocker_session: ID of the session causing the block.
     - status: Execution status of the blocked session (e.g., running, suspended).
@@ -174,7 +175,6 @@ ORDER BY avg_elapsed_time DESC;
     - wait_time: Duration in milliseconds the session has been waiting.
     - cpu_time: Total CPU time consumed by the session in milliseconds.
     - total_elapsed_time: Wall-clock time since the request started.
-    - sql_text: The exact SQL statement being executed by the blocked session.
 
   Usage:
     - Useful for diagnosing blocking chains and understanding query-level contention.
@@ -260,10 +260,10 @@ ORDER BY cp.usecounts DESC;
         Indicates the plan was used only once before being cached.
 
   Output Fields:
+    - query_text: Full SQL statement associated with the plan.
     - usecounts: Number of times the plan has been reused (always 1 in this case).
     - size_kb: Size of the cached plan in kilobytes (converted from bytes).
     - objtype: Object type, filtered to 'Adhoc'.
-    - query_text: Full SQL statement associated with the plan.
 
   Ordering:
     - Results are sorted by size_kb descending to spotlight space-heavy single-use plans.
@@ -304,6 +304,7 @@ ORDER BY cp.size_in_bytes DESC;
       meaning the session is actively waiting for a resource held by another session.
 
   Output Fields:
+    - query_text: Full SQL query text that the blocked session is trying to execute.
     - session_id: ID of the currently executing (blocked) session.
     - blocking_session_id: ID of the session that is causing the block.
     - status: Execution status of the blocked session (e.g., 'suspended', 'running').
@@ -311,7 +312,6 @@ ORDER BY cp.size_in_bytes DESC;
     - wait_time: Duration in milliseconds the session has been blocked.
     - cpu_time: Total processor time used by the session so far.
     - total_elapsed_time: Wall-clock duration of the current request.
-    - sql_text: Full SQL query text that the blocked session is trying to execute.
 
   Usage:
     - Helps pinpoint real-time blocking scenarios that could lead to performance degradation or deadlocks.
@@ -357,6 +357,7 @@ WHERE r.blocking_session_id <> 0;
     - CROSS APPLY retrieves SQL text from current request’s plan handle.
 
   Output Fields:
+    - query_text: SQL query responsible for the lock request.
     - resource_type: Type of locked resource (e.g., OBJECT, PAGE, KEY).
     - resource_database_id: ID of the database where the resource resides.
     - resource_associated_entity_id: Internal identifier of the locked object or entity.
@@ -364,7 +365,6 @@ WHERE r.blocking_session_id <> 0;
     - request_status: Current state of the lock request (e.g., GRANTED, WAIT).
     - session_id: ID of the session holding or requesting the lock.
     - login_name: Login name associated with the session.
-    - sql_text: SQL query responsible for the lock request.
 
   Usage:
     - Useful for diagnosing contention, lock escalation, or transaction scope.
@@ -399,16 +399,17 @@ CROSS APPLY sys.dm_exec_sql_text(r.sql_handle) t;
 
   Filtering Logic:
     - Excludes wait types containing 'SLEEP' to remove idle or background waits that aren't performance-relevant.
+    - Excludes rows where waiting_tasks_count = 0 to avoid divide-by-zero and non-informative rows.
 
   Key Computations:
     - wait_time_sec: Converts wait_time_ms to seconds for readability.
-    - avg_wait_time_ms: Calculates average wait time per task (wait_time_ms / waiting_tasks_count).
+    - avg_wait_time_sec: Average wait per task in seconds (wait_time_ms / (1000 * waiting_tasks_count)).
 
   Output Fields:
     - wait_type: Description of the wait category (e.g., LCK_M_IX, PAGEIOLATCH_SH).
     - wait_time_sec: Total time spent on this wait type (in seconds).
     - waiting_tasks_count: Number of tasks that encountered this wait.
-    - avg_wait_time_ms: Average time a task spends waiting on this wait type.
+    - avg_wait_time_sec: Average time a task spends waiting on this wait type (in seconds).
 
   Ordering:
     - Results sorted by wait_time_ms descending to highlight the most impactful wait types.
