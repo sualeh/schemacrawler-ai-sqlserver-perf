@@ -9,6 +9,9 @@ import fastmcp
 from schemacrawler_ai_sqlserver_perf.tools.database_connection_tool import (
     database_connection_tool,
 )
+from schemacrawler_ai_sqlserver_perf.tools.top_queries_tool import (
+    top_queries_tool,
+)
 from schemacrawler_ai_sqlserver_perf.database import validate_database_connection
 
 # Configure logging
@@ -36,6 +39,7 @@ def create_server() -> fastmcp.FastMCP:
 
     # Register the tools using the decorator
     server.tool()(database_connection_tool)
+    server.tool()(top_queries_tool)
 
     logger.info("SchemaCrawler AI MCP Server for SQL Server Performance initialized")
     return server
