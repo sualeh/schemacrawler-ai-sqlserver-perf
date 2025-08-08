@@ -97,7 +97,7 @@ class TestDatabaseConfig:
             with pytest.raises(
                 ValueError,
                 match="Either SCHCRWLR_CONNECTION_URL or all of the following "
-                      "are required",
+                "are required",
             ):
                 DatabaseConfig.from_environment()
 

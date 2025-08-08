@@ -59,7 +59,7 @@ SQL_TEMPLATES = {
 
 
 async def top_queries_tool(
-    metric: Literal["cpu", "reads", "time"] = "cpu"
+    metric: Literal["cpu", "reads", "time"] = "cpu",
 ) -> dict[str, Any]:
     """
     Get the top 10 SQL queries by the specified metric.
