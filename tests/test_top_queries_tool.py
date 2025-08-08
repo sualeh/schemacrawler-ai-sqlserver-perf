@@ -1,49 +1,8 @@
-"""Tests for top queries tool."""
+"""Tests for top queries tool SQL templates sourced from the code module."""
 
-
-
-# SQL templates from the tool
-SQL_TEMPLATES = {
-    "cpu": """
-SELECT TOP 10
-  SUBSTRING(st.text, qs.statement_start_offset / 2,
-        (CASE WHEN qs.statement_end_offset = -1
-          THEN LEN(CONVERT(NVARCHAR(MAX), st.text)) * 2
-          ELSE qs.statement_end_offset END - qs.statement_start_offset) / 2) AS query_text,
-  qs.execution_count,
-  qs.total_worker_time / qs.execution_count AS avg_cpu_time,
-  qs.total_worker_time AS total_cpu_time
-FROM sys.dm_exec_query_stats qs
-CROSS APPLY sys.dm_exec_sql_text(qs.sql_handle) st
-ORDER BY avg_cpu_time DESC;
-""",
-    "reads": """
-SELECT TOP 10
-  SUBSTRING(st.text, qs.statement_start_offset / 2,
-        (CASE WHEN qs.statement_end_offset = -1
-          THEN LEN(CONVERT(NVARCHAR(MAX), st.text)) * 2
-          ELSE qs.statement_end_offset END - qs.statement_start_offset) / 2) AS query_text,
-  qs.execution_count,
-  qs.total_logical_reads / qs.execution_count AS avg_logical_reads,
-  qs.total_logical_reads
-FROM sys.dm_exec_query_stats qs
-CROSS APPLY sys.dm_exec_sql_text(qs.sql_handle) st
-ORDER BY avg_logical_reads DESC;
-""",
-    "time": """
-SELECT TOP 10
-  SUBSTRING(st.text, qs.statement_start_offset / 2,
-        (CASE WHEN qs.statement_end_offset = -1
-          THEN LEN(CONVERT(NVARCHAR(MAX), st.text)) * 2
-          ELSE qs.statement_end_offset END - qs.statement_start_offset) / 2) AS query_text,
-  qs.execution_count,
-  qs.total_elapsed_time / qs.execution_count AS avg_elapsed_time,
-  qs.total_elapsed_time
-FROM sys.dm_exec_query_stats qs
-CROSS APPLY sys.dm_exec_sql_text(qs.sql_handle) st
-ORDER BY avg_elapsed_time DESC;
-""",
-}
+from schemacrawler_ai_sqlserver_perf.tools.top_queries_tool import (
+    SQL_TEMPLATES,
+)
 
 
 class TestTopQueriesTool:
