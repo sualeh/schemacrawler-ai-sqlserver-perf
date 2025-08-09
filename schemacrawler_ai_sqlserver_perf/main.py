@@ -12,6 +12,14 @@ from schemacrawler_ai_sqlserver_perf.tools.database_connection_tool import (
 from schemacrawler_ai_sqlserver_perf.tools.top_queries_tool import (
     top_queries_tool,
 )
+from schemacrawler_ai_sqlserver_perf.tools.performance_monitoring_tool import (
+    monitor_live_activity_blocking,
+    find_cached_plans_reuse,
+    detect_plan_cache_bloat,
+    find_active_blocking_waits,
+    detect_lock_contention,
+    analyze_wait_statistics,
+)
 from schemacrawler_ai_sqlserver_perf.database import validate_database_connection
 
 # Configure logging
@@ -40,6 +48,14 @@ def create_server() -> fastmcp.FastMCP:
     # Register the tools using the decorator
     server.tool()(database_connection_tool)
     server.tool()(top_queries_tool)
+
+    # Register performance monitoring tools
+    server.tool()(monitor_live_activity_blocking)
+    server.tool()(find_cached_plans_reuse)
+    server.tool()(detect_plan_cache_bloat)
+    server.tool()(find_active_blocking_waits)
+    server.tool()(detect_lock_contention)
+    server.tool()(analyze_wait_statistics)
 
     logger.info("SchemaCrawler AI MCP Server for SQL Server Performance initialized")
     return server
